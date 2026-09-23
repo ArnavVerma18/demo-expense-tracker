@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poverty Budget Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Poverty Budget Simulator</h1>
+      <p>Manage a monthly income of &#8377;8,000 &mdash; every rupee counts.</p>
+    </div>
+
+    <!-- Income Banner -->
+    <div class="income-banner">
+      <div class="income-info">
+        <div class="income-label">Monthly Income</div>
+        <div class="income-amount">&#8377;8,000</div>
+      </div>
+      <span class="income-badge">&#9679; Fixed</span>
+    </div>
+
+    <!-- Sliders Card -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Monthly Expenses</div>
+          <div class="card-description">Allocate your budget across categories.</div>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="name"><span class="icon">&#127968;</span> Rent</span>
+          <span class="value" id="rentValue">&#8377;0</span>
+        </div>
+        <input type="range" id="rent" min="0" max="8000" step="100" value="0" class="fill-track" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="name"><span class="icon">&#127834;</span> Food</span>
+          <span class="value" id="foodValue">&#8377;0</span>
+        </div>
+        <input type="range" id="food" min="0" max="8000" step="100" value="0" class="fill-track" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="name"><span class="icon">&#128652;</span> Transport</span>
+          <span class="value" id="transportValue">&#8377;0</span>
+        </div>
+        <input type="range" id="transport" min="0" max="8000" step="100" value="0" class="fill-track" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="name"><span class="icon">&#128138;</span> Medical</span>
+          <span class="value" id="medicalValue">&#8377;0</span>
+        </div>
+        <input type="range" id="medical" min="0" max="8000" step="100" value="0" class="fill-track" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="name"><span class="icon">&#128218;</span> School Fees</span>
+          <span class="value" id="schoolValue">&#8377;0</span>
+        </div>
+        <input type="range" id="school" min="0" max="8000" step="100" value="0" class="fill-track" />
+      </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="card balance-card" id="balanceCard">
+      <div class="balance-label">Remaining Balance</div>
+      <div class="balance-amount state-green" id="balanceAmount">&#8377;8,000</div>
+
+      <div class="spent-bar-container">
+        <div class="spent-bar-bg">
+          <div class="spent-bar-fill state-green" id="spentBarFill" style="width: 0%"></div>
+        </div>
+        <div class="spent-labels">
+          <span>&#8377;0 spent</span>
+          <span>&#8377;8,000</span>
+        </div>
+      </div>
+
+      <div class="event-deduction" id="eventDeduction" style="opacity: 0">
+        Surprise expense: <strong id="eventDeductionAmount">&#8377;0</strong>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback green" id="feedback">
+      <span class="feedback-icon" id="feedbackIcon">&#9989;</span>
+      <span id="feedbackText">You haven't allocated anything yet. Start budgeting!</span>
+    </div>
+
+    <!-- Life Event Button -->
+    <button class="event-btn" id="eventBtn" onclick="triggerLifeEvent()">
+      &#127922; Random Life Event
+    </button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="event-toast" id="eventToast">
+    <div class="event-name" id="toastName"></div>
+    <div class="event-cost" id="toastCost"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
