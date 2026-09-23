@@ -3,24 +3,1716 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Poverty Budget Simulator</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Poverty Budget Simulator — SDG 1: No Poverty</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #0a0a0a;
+  --accent: #f4f4f5;
+  --accent-foreground: #0a0a0a;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --destructive: #ef4444;
+  --destructive-light: rgba(239, 68, 68, 0.1);
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.1);
+  --info: #0284c7;
+  --info-light: rgba(2, 132, 199, 0.1);
+  --radius: 0.75rem;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #fafafa;
+  color: var(--foreground);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================================== */
+/* 1. HOMEPAGE HEADER & NAVIGATION */
+/* ========================================================== */
+.site-header {
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sdg-pill {
+  background: #e5243b; /* UN SDG 1 Official Red */
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.brand-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-nav a {
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition: color 0.15s ease;
+}
+
+.site-nav a:hover {
+  color: var(--foreground);
+}
+
+.site-nav .nav-cta {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.site-nav .nav-cta:hover {
+  background: #27272a;
+  color: var(--primary-foreground);
+}
+
+/* ========================================================== */
+/* 2. INTRO HERO SECTION */
+/* ========================================================== */
+.intro-hero-wrapper {
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 20px 56px;
+}
+
+.intro-container {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.hero-section {
+  text-align: center;
+}
+
+.hero-badge-tag {
+  display: inline-block;
+  background: rgba(229, 36, 59, 0.08);
+  color: #e5243b;
+  border: 1px solid rgba(229, 36, 59, 0.2);
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero-headline {
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #09090b;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 600;
+  color: #e5243b;
+  margin-bottom: 18px;
+}
+
+.hero-narrative {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #52525b;
+  max-width: 680px;
+  margin: 0 auto 32px;
+}
+
+/* 3-Stat Banner Grid */
+.stats-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-top: 3px solid #e5243b;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-number {
+  font-size: 1.85rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #09090b;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.stat-desc {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* Instructions Box */
+.instructions-box {
+  background: rgba(2, 132, 199, 0.05);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.instructions-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.instructions-text {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #0f172a;
+}
+
+.instructions-text strong {
+  color: #0369a1;
+}
+
+/* CTA Group */
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-primary-lg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.15s ease;
+}
+
+.btn-primary-lg:hover {
+  background: #27272a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+}
+
+.btn-primary-lg:active {
+  transform: translateY(0);
+}
+
+.source-credit-inline {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+/* ========================================================== */
+/* 3. SIMULATOR CONTAINER & MAIN LAYOUT */
+/* ========================================================== */
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 16px 60px;
+}
+
+/* Simulator Header */
+.header {
+  margin-bottom: 20px;
+}
+
+.header-pretitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #e5243b;
+  margin-bottom: 4px;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.header p {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+/* Month Status Bar */
+.month-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.month-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.month-tag {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+
+.month-subtext {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.month-finances {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.finance-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 9999px;
+}
+
+.debt-pill {
+  background: var(--destructive-light);
+  color: var(--destructive);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.rate-tag {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.savings-pill {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Income Banner */
+.income-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.income-info .income-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.income-info .income-amount {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--foreground);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.income-info .income-subnote {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+.income-badge-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.income-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-light);
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.job-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--destructive);
+  background: var(--destructive-light);
+  padding: 3px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ========================================================== */
+/* 4. WORLD BANK DAILY POVERTY LINE GAUGE */
+/* ========================================================== */
+.gauge-card {
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+.gauge-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.gauge-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.gauge-subtitle {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+}
+
+.gauge-current-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.gauge-meter-wrapper {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.gauge-track {
+  width: 100%;
+  height: 12px;
+  background: #e4e4e7;
+  border-radius: 9999px;
+  position: relative;
+  overflow: visible;
+}
+
+.gauge-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--success);
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.gauge-fill.below-line {
+  background: var(--destructive);
+}
+
+.poverty-line-marker {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 3px;
+  background: #09090b;
+  transform: translateX(-50%);
+  z-index: 5;
+  border-radius: 2px;
+}
+
+.marker-flag {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #18181b;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+  margin-top: 6px;
+}
+
+.threshold-label {
+  font-weight: 600;
+  color: #09090b;
+}
+
+.gauge-verdict {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.gauge-verdict strong {
+  color: var(--foreground);
+}
+
+/* ========================================================== */
+/* 5. HOUSEHOLD DEPENDENTS TOGGLE */
+/* ========================================================== */
+.dependents-card {
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.card-header-simple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.mode-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--muted);
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--muted-foreground);
+}
+
+.dependents-toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dep-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.dep-btn:hover {
+  border-color: #a1a1aa;
+}
+
+.dep-btn.active {
+  background: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+  box-shadow: var(--shadow-sm);
+}
+
+.dep-btn .dep-icon {
+  font-size: 1.25rem;
+}
+
+.dep-btn .dep-text strong {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dep-btn .dep-text small {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+}
+
+.dep-btn.active .dep-text small {
+  color: #d4d4d8;
+}
+
+/* ========================================================== */
+/* 6. SLIDERS & CATEGORY TOOLTIPS */
+/* ========================================================== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+
+.card-description {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+}
+
+.slider-group {
+  margin-bottom: 20px;
+}
+
+.slider-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.slider-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.slider-label .name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider-label .name .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Info Tooltip */
+.info-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  outline: none;
+}
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.info-tooltip-wrap:hover .info-icon,
+.info-tooltip-wrap:focus .info-icon {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.tooltip-content {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #18181b;
+  color: #fafafa;
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 7px 11px;
+  border-radius: 6px;
+  width: 210px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  z-index: 30;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #18181b transparent transparent transparent;
+}
+
+.info-tooltip-wrap:hover .tooltip-content,
+.info-tooltip-wrap:focus .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.slider-label .value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Range Slider */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--muted);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--background);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--background);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* Slider Fill Track */
+input[type='range'].fill-track {
+  background: linear-gradient(
+    to right,
+    var(--primary) 0%,
+    var(--primary) var(--fill),
+    var(--muted) var(--fill),
+    var(--muted) 100%
+  );
+}
+
+/* ========================================================== */
+/* 7. BALANCE CARD & SHAKE ANIMATION */
+/* ========================================================== */
+.balance-card {
+  text-align: center;
+  padding: 28px 24px;
+  position: relative;
+  transition: border-color 0.2s ease;
+}
+
+.balance-card .balance-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  margin-bottom: 4px;
+}
+
+.balance-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  transition: color 0.2s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.balance-amount.state-green { color: var(--success); }
+.balance-amount.state-orange { color: var(--warning); }
+.balance-amount.state-red { color: var(--destructive); }
+
+/* Shake Animation */
+@keyframes shakeAnimation {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.balance-card.shake {
+  animation: shakeAnimation 0.4s ease-in-out;
+  border-color: var(--destructive);
+}
+
+/* Spent Bar */
+.spent-bar-container {
+  margin-top: 20px;
+}
+
+.spent-bar-bg {
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+
+.spent-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease, background 0.3s ease;
+  background: var(--primary);
+}
+
+.spent-bar-fill.state-green { background: var(--success); }
+.spent-bar-fill.state-orange { background: var(--warning); }
+.spent-bar-fill.state-red { background: var(--destructive); }
+
+.spent-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Event Deduction & Debt Notice */
+.event-deduction {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin-top: 12px;
+  transition: opacity 0.2s ease;
+}
+
+.event-deduction strong {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.debt-interest-notice {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--destructive);
+  margin-top: 8px;
+  background: var(--destructive-light);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.debt-interest-notice strong {
+  font-weight: 700;
+}
+
+/* ========================================================== */
+/* 8. FEEDBACK BOX */
+/* ========================================================== */
+.feedback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border: 1px solid transparent;
+  margin-bottom: 16px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.feedback .feedback-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.feedback.green {
+  background: rgba(16, 185, 129, 0.08);
+  color: #065f46;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.feedback.orange {
+  background: rgba(245, 158, 11, 0.08);
+  color: #92400e;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.feedback.red {
+  background: rgba(239, 68, 68, 0.08);
+  color: #991b1b;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* ========================================================== */
+/* 9. ACTION BUTTONS (LIFE EVENT & JOB LOSS) */
+/* ========================================================== */
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.event-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+
+.event-btn:hover {
+  background: #27272a;
+}
+
+.event-btn:active {
+  transform: scale(0.98);
+}
+
+.jobloss-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: #ffffff;
+  color: #b91c1c;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+
+.jobloss-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+}
+
+.jobloss-btn:active {
+  transform: scale(0.98);
+}
+
+/* Next Month Action Card */
+.next-month-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.next-month-heading {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.next-month-details {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+}
+
+.next-month-btn {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+
+.next-month-btn:hover {
+  background: #0369a1;
+  transform: translateY(-1px);
+}
+
+.next-month-btn:active {
+  transform: translateY(0);
+}
+
+/* ========================================================== */
+/* 10. MODALS & POPUPS */
+/* ========================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-pill-tag {
+  display: inline-block;
+  background: var(--destructive-light);
+  color: var(--destructive);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+.modal-pill-tag.summary-tag {
+  background: rgba(2, 132, 199, 0.1);
+  color: #0284c7;
+}
+
+.modal-headline {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #09090b;
+  margin-bottom: 12px;
+}
+
+.modal-stat-box {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #991b1b;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.modal-explanation {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  margin-bottom: 22px;
+  text-align: left;
+}
+
+.modal-btn {
+  width: 100%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.modal-btn:hover {
+  background: #27272a;
+}
+
+/* 3-Month Summary Card Modal */
+.summary-card-modal {
+  max-width: 520px;
+  text-align: left;
+}
+
+.summary-subtitle {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin-bottom: 18px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.summary-metric-card {
+  background: var(--muted);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.summary-metric-card.full-width {
+  grid-column: span 2;
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.metric-value.highlight-green { color: var(--success); }
+.metric-value.highlight-red { color: var(--destructive); }
+.metric-value.highlight-blue { color: var(--info); }
+
+.metric-note {
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+/* Month Breakdown Table */
+.month-breakdown-box {
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.breakdown-table th {
+  background: #f4f4f5;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #3f3f46;
+  border-bottom: 1px solid var(--border);
+}
+
+.breakdown-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f4f4f5;
+  color: #27272a;
+}
+
+.breakdown-table tr:last-child td {
+  border-bottom: none;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 12px 18px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--muted);
+}
+
+/* ========================================================== */
+/* 11. TOAST NOTIFICATION */
+/* ========================================================== */
+.event-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  max-width: 380px;
+  width: calc(100% - 32px);
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.event-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.event-toast .event-name {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.event-toast .event-cost {
+  color: #fca5a5;
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+/* ========================================================== */
+/* 12. SITE FOOTER */
+/* ========================================================== */
+.site-footer {
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  padding: 36px 20px 48px;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 820px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+  margin-bottom: 24px;
+}
+
+.footer-col h3 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  margin-bottom: 6px;
+}
+
+.footer-col p {
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+}
+
+.footer-bottom {
+  max-width: 820px;
+  margin: 0 auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* ========================================================== */
+/* 13. RESPONSIVE BREAKPOINTS */
+/* ========================================================== */
+@media (max-width: 640px) {
+  .stats-banner-grid {
+    grid-template-columns: 1fr;
+  }
+  .action-buttons-grid {
+    grid-template-columns: 1fr;
+  }
+  .next-month-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .next-month-btn {
+    width: 100%;
+  }
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+  .summary-actions {
+    flex-direction: column;
+  }
+  .summary-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  .container {
+    padding: 24px 12px 40px;
+  }
+  .card {
+    padding: 20px 16px;
+  }
+  .balance-amount {
+    font-size: 2rem;
+  }
+  .income-info .income-amount {
+    font-size: 1.5rem;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  .dependents-toggle-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── DIFFICULTY TOGGLE ─── */
+.difficulty-toggle-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.diff-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.diff-btn-group {
+  display: flex;
+  gap: 6px;
+}
+.diff-btn {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.diff-btn:hover {
+  color: var(--foreground);
+  border-color: #a1a1aa;
+}
+.diff-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+</style>
+  <style>
+    /* Embedded backup & new enhancements ensuring 100% standalone execution */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
+
+  <!-- ========================================== -->
+  <!-- 1. HOMEPAGE & INTRO SECTION (ABOVE SIMULATOR) -->
+  <!-- ========================================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="site-brand">
+        <span class="sdg-pill">SDG 1</span>
+        <span class="brand-title">Poverty Budget Simulator</span>
+      </div>
+      <nav class="site-nav">
+        <a href="#statsBanner">Global Facts</a>
+        <a href="#instructionsSection">How It Works</a>
+        <a href="#simulatorSection" class="nav-cta">Launch Simulator</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="intro-hero-wrapper">
+    <div class="intro-container">
+
+      <!-- Hero Header -->
+      <div class="hero-section">
+        <div class="hero-badge-tag">United Nations Sustainable Development Goal 1</div>
+        <h1 class="hero-headline">What Does &#8377;8,000 a Month Actually Buy?</h1>
+        <p class="hero-subtitle">A simulation of SDG 1: No Poverty</p>
+        <p class="hero-narrative">
+          SDG 1 aims to eradicate extreme poverty in all its forms everywhere by 2030. Yet for hundreds of millions of families, poverty is not an abstract figure on a graph &mdash; it is an agonizing daily calculation where choosing between food, medicines, rent, and school fees means walking a continuous tightrope. This simulator lets you experience these real budget trade-offs firsthand.
+        </p>
+
+        <!-- 3-Stat Banner -->
+        <div class="stats-banner-grid" id="statsBanner">
+          <div class="stat-card">
+            <div class="stat-number">847M</div>
+            <div class="stat-desc">people still live in extreme poverty worldwide</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">~10%</div>
+            <div class="stat-desc">of the global population falls below the poverty line</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">80%</div>
+            <div class="stat-desc">of the world's extreme poor live in Sub-Saharan Africa</div>
+          </div>
+        </div>
+
+        <!-- Instructions Line & CTA -->
+        <div class="instructions-box" id="instructionsSection">
+          <div class="instructions-icon">&#128161;</div>
+          <div class="instructions-text">
+            <strong>How the simulator works:</strong> Allocate your monthly &#8377;8,000 income across basic living essentials using the sliders. Test your survival against random life emergencies, manage dependents, weather sudden job cuts, and try to navigate 3 full months without falling into a compounding debt trap.
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="#simulatorSection" class="btn-primary-lg" id="startSimBtn">
+            Start the Simulation &darr;
+          </a>
+          <span class="source-credit-inline">
+            &#128202; Statistics: World Bank Poverty and Inequality Platform, 2026
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. SIMULATOR SECTION (CORE & NEW FEATURES) -->
+  <!-- ========================================== -->
+  <main class="container" id="simulatorSection">
+
+    <!-- Simulator Header -->
     <div class="header">
-      <h1>Poverty Budget Simulator</h1>
-      <p>Manage a monthly income of &#8377;8,000 &mdash; every rupee counts.</p>
+      <div class="header-pretitle">Interactive Budget Lab</div>
+      <h1>Monthly Budget Simulator</h1>
+      <p>Manage a monthly income of <span id="displayBaseIncome">&#8377;8,000</span> &mdash; every rupee counts.</p>
     </div>
 
-    <!-- Income Banner -->
+    <!-- Month Status & Progress Indicator -->
+    <div class="month-status-card" id="monthStatusCard">
+      <div class="month-indicator">
+        <span class="month-tag" id="currentMonthTag">Month 1 of 3</span>
+        <span class="month-subtext" id="monthCycleSubtext">Standard Budget Cycle</span>
+      </div>
+      <div class="month-finances">
+        <div class="finance-pill debt-pill" id="carriedDebtPill" style="display: none;">
+          Debt: <strong id="carriedDebtAmount">&#8377;0</strong> <span class="rate-tag">(+5% int.)</span>
+        </div>
+        <div class="finance-pill savings-pill" id="carriedSavingsPill" style="display: none;">
+          Savings: <strong id="carriedSavingsAmount">&#8377;0</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Income Banner & Daily Poverty Line Gauge -->
+        <!-- Difficulty Toggle -->
+    <div class="difficulty-toggle-wrap">
+      <span class="diff-label">&#9878; Difficulty Level:</span>
+      <div class="diff-btn-group">
+        <button type="button" class="diff-btn active" id="diffNormalBtn" onclick="setDifficulty('normal')">
+          Standard (&#8377;8,000)
+        </button>
+        <button type="button" class="diff-btn" id="diffHardBtn" onclick="setDifficulty('hard')">
+          Strict Poverty Line (&#8377;5,400)
+        </button>
+      </div>
+    </div>
+
     <div class="income-banner">
       <div class="income-info">
-        <div class="income-label">Monthly Income</div>
-        <div class="income-amount">&#8377;8,000</div>
+        <div class="income-label">Monthly Income Available</div>
+        <div class="income-amount" id="bannerIncomeAmount">&#8377;8,000</div>
+        <div class="income-subnote" id="incomeSubnote">Base wage: &#8377;8,000/month</div>
       </div>
-      <span class="income-badge">&#9679; Fixed</span>
+      <div class="income-badge-col">
+        <span class="income-badge" id="incomeStatusBadge">&#9679; Fixed</span>
+        <span class="job-status-badge" id="jobStatusBadge" style="display: none;">&#9888; 50% Job Cut</span>
+      </div>
+    </div>
+
+    <!-- World Bank Daily Income Gauge -->
+    <div class="card gauge-card" id="gaugeCard">
+      <div class="gauge-header">
+        <div>
+          <div class="gauge-title">&#127758; Daily Income vs. World Bank Poverty Line</div>
+          <div class="gauge-subtitle">Comparing simulated daily income (income &divide; 30) against the international benchmark</div>
+        </div>
+        <div class="gauge-current-val" id="dailyIncomeValue">&#8377;267 / day</div>
+      </div>
+
+      <div class="gauge-meter-wrapper">
+        <div class="gauge-track">
+          <div class="gauge-fill" id="gaugeFill" style="width: 76%;"></div>
+          <!-- Marker for World Bank Poverty Line $2.15 (~₹180/day) -->
+          <div class="poverty-line-marker" style="left: 51.4%;">
+            <div class="marker-flag">&#9873; &#8377;180/day ($2.15/day Poverty Line)</div>
+          </div>
+        </div>
+        <div class="gauge-labels">
+          <span>&#8377;0/day</span>
+          <span class="threshold-label">&#8377;180 Extreme Poverty Line</span>
+          <span>&#8377;350/day</span>
+        </div>
+      </div>
+
+      <div class="gauge-verdict" id="gaugeVerdict">
+        Simulated daily income is <strong>&#8377;267/day</strong> &mdash; currently above the <strong>&#8377;180/day ($2.15)</strong> extreme poverty line.
+      </div>
+    </div>
+
+    <!-- Household Dependents Toggle -->
+    <div class="card dependents-card">
+      <div class="card-header-simple">
+        <span class="section-label">&#128106; Household Dependents Mode</span>
+        <span class="mode-badge" id="householdBadge">1 Person</span>
+      </div>
+      <div class="dependents-toggle-group">
+        <button type="button" class="dep-btn active" id="depSelfBtn" onclick="setHouseholdMode('self')">
+          <span class="dep-icon">&#128100;</span>
+          <span class="dep-text">
+            <strong>Supporting Yourself</strong>
+            <small>Single adult baseline costs</small>
+          </span>
+        </button>
+        <button type="button" class="dep-btn" id="depFamilyBtn" onclick="setHouseholdMode('family')">
+          <span class="dep-icon">&#128106;</span>
+          <span class="dep-text">
+            <strong>Supporting a Family of 4</strong>
+            <small>Higher food, medical &amp; schooling needs</small>
+          </span>
+        </button>
+      </div>
     </div>
 
     <!-- Sliders Card -->
@@ -28,45 +1720,80 @@
       <div class="card-header">
         <div>
           <div class="card-title">Monthly Expenses</div>
-          <div class="card-description">Allocate your budget across categories.</div>
+          <div class="card-description">Allocate your budget across categories. Hover &#9432; for real-world context.</div>
         </div>
       </div>
 
+      <!-- Rent -->
       <div class="slider-group">
         <div class="slider-label">
-          <span class="name"><span class="icon">&#127968;</span> Rent</span>
+          <span class="name">
+            <span class="icon">&#127968;</span> Rent
+            <span class="info-tooltip-wrap" tabindex="0">
+              <span class="info-icon">&#9432;</span>
+              <span class="tooltip-content">Covers shared room or informal slum housing. Eviction risk if unpaid.</span>
+            </span>
+          </span>
           <span class="value" id="rentValue">&#8377;0</span>
         </div>
         <input type="range" id="rent" min="0" max="8000" step="100" value="0" class="fill-track" />
       </div>
 
+      <!-- Food -->
       <div class="slider-group">
         <div class="slider-label">
-          <span class="name"><span class="icon">&#127834;</span> Food</span>
+          <span class="name">
+            <span class="icon">&#127834;</span> Food
+            <span class="info-tooltip-wrap" tabindex="0">
+              <span class="info-icon">&#9432;</span>
+              <span class="tooltip-content">Basic rice, lentils, seasonal vegetables. No meat or luxury calories.</span>
+            </span>
+          </span>
           <span class="value" id="foodValue">&#8377;0</span>
         </div>
         <input type="range" id="food" min="0" max="8000" step="100" value="0" class="fill-track" />
       </div>
 
+      <!-- Transport -->
       <div class="slider-group">
         <div class="slider-label">
-          <span class="name"><span class="icon">&#128652;</span> Transport</span>
+          <span class="name">
+            <span class="icon">&#128652;</span> Transport
+            <span class="info-tooltip-wrap" tabindex="0">
+              <span class="info-icon">&#9432;</span>
+              <span class="tooltip-content">Suburban bus, train, or shared auto fares necessary to reach daily wage jobs.</span>
+            </span>
+          </span>
           <span class="value" id="transportValue">&#8377;0</span>
         </div>
         <input type="range" id="transport" min="0" max="8000" step="100" value="0" class="fill-track" />
       </div>
 
+      <!-- Medical -->
       <div class="slider-group">
         <div class="slider-label">
-          <span class="name"><span class="icon">&#128138;</span> Medical</span>
+          <span class="name">
+            <span class="icon">&#128138;</span> Medical
+            <span class="info-tooltip-wrap" tabindex="0">
+              <span class="info-icon">&#9432;</span>
+              <span class="tooltip-content">Out-of-pocket basic medicines and primary clinic visits. No private insurance.</span>
+            </span>
+          </span>
           <span class="value" id="medicalValue">&#8377;0</span>
         </div>
         <input type="range" id="medical" min="0" max="8000" step="100" value="0" class="fill-track" />
       </div>
 
+      <!-- School Fees -->
       <div class="slider-group">
         <div class="slider-label">
-          <span class="name"><span class="icon">&#128218;</span> School Fees</span>
+          <span class="name">
+            <span class="icon">&#128218;</span> School Fees
+            <span class="info-tooltip-wrap" tabindex="0">
+              <span class="info-icon">&#9432;</span>
+              <span class="tooltip-content">Government/low-cost school fees, notebooks, pens, and mandatory uniforms.</span>
+            </span>
+          </span>
           <span class="value" id="schoolValue">&#8377;0</span>
         </div>
         <input type="range" id="school" min="0" max="8000" step="100" value="0" class="fill-track" />
@@ -83,13 +1810,16 @@
           <div class="spent-bar-fill state-green" id="spentBarFill" style="width: 0%"></div>
         </div>
         <div class="spent-labels">
-          <span>&#8377;0 spent</span>
-          <span>&#8377;8,000</span>
+          <span id="spentLabel">&#8377;0 spent</span>
+          <span id="totalBudgetCap">&#8377;8,000</span>
         </div>
       </div>
 
       <div class="event-deduction" id="eventDeduction" style="opacity: 0">
         Surprise expense: <strong id="eventDeductionAmount">&#8377;0</strong>
+      </div>
+      <div class="debt-interest-notice" id="debtInterestNotice" style="display: none;">
+        Debt with 5% interest carried forward: <strong id="noticeDebtAmount">&#8377;0</strong>
       </div>
     </div>
 
@@ -99,18 +1829,781 @@
       <span id="feedbackText">You haven't allocated anything yet. Start budgeting!</span>
     </div>
 
-    <!-- Life Event Button -->
-    <button class="event-btn" id="eventBtn" onclick="triggerLifeEvent()">
-      &#127922; Random Life Event
-    </button>
-  </div>
+    <!-- Simulation Action Buttons (Life Event & Job Loss) -->
+    <div class="action-buttons-grid">
+      <button class="event-btn" id="eventBtn" onclick="triggerLifeEvent()">
+        &#127922; Random Life Event
+      </button>
 
-  <!-- Toast Notification -->
+      <button class="jobloss-btn" id="jobLossBtn" onclick="triggerJobLossEvent()">
+        &#128188; Random Job-Loss Event
+      </button>
+    </div>
+
+    <!-- Next Month Action Bar -->
+    <div class="next-month-card">
+      <div class="next-month-info">
+        <div class="next-month-heading">Ready for the Next Cycle?</div>
+        <div class="next-month-details">
+          Any deficit carries over as debt at <strong>+5% interest</strong>. Leftover funds roll over as savings.
+        </div>
+      </div>
+      <button class="next-month-btn" id="nextMonthBtn" onclick="advanceToNextMonth()">
+        Next Month &rarr;
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 3. FOOTER & WORLD BANK CITATION -->
+  <!-- ========================================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3>SDG 1: No Poverty</h3>
+        <p>Target 1.1: By 2030, eradicate extreme poverty for all people everywhere, currently measured as people living on less than $2.15 a day.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Data Citation</h3>
+        <p>Statistics: World Bank Poverty and Inequality Platform, 2026. Figures converted at purchasing power parity standards.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Poverty Budget Simulator &bull; Educational Open Access Simulation
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- 4. MODALS & TOASTS -->
+  <!-- ========================================== -->
+
+  <!-- Toast Notification (Life Event & Job Loss) -->
   <div class="event-toast" id="eventToast">
     <div class="event-name" id="toastName"></div>
     <div class="event-cost" id="toastCost"></div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- One-Time First Negative Balance Educational Modal -->
+  <div class="modal-backdrop" id="negativeModalBackdrop">
+    <div class="modal-card">
+      <div class="modal-pill-tag">&#9888; Reality Check</div>
+      <h2 class="modal-headline">Living in the Red</h2>
+      <div class="modal-stat-box">
+        &ldquo;Over 800 million people worldwide live on less than $2.15/day&rdquo;
+      </div>
+      <p class="modal-explanation">
+        Your budget has slipped into the negative. For low-income households, there are no credit cards or safety nets &mdash; only informal moneylenders charging 5% to 10% monthly interest. Once in debt, a single illness or car breakdown traps families for years.
+      </p>
+      <button type="button" class="modal-btn" id="dismissNegativeModalBtn" onclick="dismissNegativeModal()">
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <!-- 3-Month Results Summary Modal / Card -->
+  <div class="modal-backdrop" id="summaryModalBackdrop">
+    <div class="modal-card summary-card-modal">
+      <div class="modal-pill-tag summary-tag">&#128203; 3-Month Simulation Results</div>
+      <h2 class="modal-headline" id="summaryHeadline">Budget Survival Summary</h2>
+      <p class="summary-subtitle">Here is how your household navigated the last 3 months:</p>
+
+      <div class="summary-grid">
+        <div class="summary-metric-card">
+          <div class="metric-label">Months Survived Debt-Free</div>
+          <div class="metric-value highlight-green" id="summaryDebtFreeMonths">0 / 3</div>
+          <div class="metric-note" id="summaryDebtFreeNote">Budget remained positive</div>
+        </div>
+
+        <div class="summary-metric-card">
+          <div class="metric-label">Total Debt Accumulated</div>
+          <div class="metric-value highlight-red" id="summaryTotalDebt">&#8377;0</div>
+          <div class="metric-note">Includes 5% monthly interest penalty</div>
+        </div>
+
+        <div class="summary-metric-card full-width">
+          <div class="metric-label">Biggest Expense Category</div>
+          <div class="metric-value highlight-blue" id="summaryBiggestExpense">&mdash;</div>
+          <div class="metric-note" id="summaryBiggestExpenseNote">Consumed the largest share of your budget</div>
+        </div>
+      </div>
+
+      <!-- Month by Month Breakdown Mini-Table -->
+      <div class="month-breakdown-box">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Cycle</th>
+              <th>Income</th>
+              <th>Total Spent</th>
+              <th>Surplus / Debt</th>
+            </tr>
+          </thead>
+          <tbody id="breakdownTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary-actions">
+        <button type="button" class="btn-primary-lg" onclick="restartSimulation()">
+          &#8634; Restart Simulation
+        </button>
+        <button type="button" class="btn-secondary" onclick="closeSummaryModal()">
+          Close Summary &amp; Review
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+// ─── DIFFICULTY TOGGLE ───
+var difficultyMode = 'normal';
+var diffNormalBtn = document.getElementById('diffNormalBtn');
+var diffHardBtn = document.getElementById('diffHardBtn');
+var displayBaseIncome = document.getElementById('displayBaseIncome');
+
+function setDifficulty(diff) {
+  if (difficultyMode === diff) return;
+  difficultyMode = diff;
+
+  if (diff === 'hard') {
+    BASE_INCOME = 5400;
+    if (diffNormalBtn) diffNormalBtn.classList.remove('active');
+    if (diffHardBtn) diffHardBtn.classList.add('active');
+    showToast('Difficulty: Strict Poverty Line', 'Income capped at \u20b95,400 ($2.15/day)', false);
+  } else {
+    BASE_INCOME = 8000;
+    if (diffHardBtn) diffHardBtn.classList.remove('active');
+    if (diffNormalBtn) diffNormalBtn.classList.add('active');
+    showToast('Difficulty: Standard Mode', 'Base income: \u20b98,000/mo', false);
+  }
+
+  if (isJobLossActive) {
+    currentMonthIncome = Math.round(BASE_INCOME * 0.5);
+  } else {
+    currentMonthIncome = BASE_INCOME;
+  }
+
+  if (bannerIncomeAmount) bannerIncomeAmount.textContent = formatCurrency(currentMonthIncome);
+  if (incomeSubnote) incomeSubnote.textContent = 'Base wage: ' + formatCurrency(currentMonthIncome) + '/month';
+  if (displayBaseIncome) displayBaseIncome.textContent = formatCurrency(BASE_INCOME);
+
+  recalculate();
+}
+
+/* ==========================================================================
+   POVERTY BUDGET SIMULATOR - JAVASCRIPT
+   SDG 1: No Poverty Interactive Simulation
+   ========================================================================== */
+
+// ─── CORE STATE VARIABLES ───
+var INCOME = 8000;
+var BASE_INCOME = 8000;
+var currentMonthIncome = 8000;
+var eventDeduction = 0;
+
+var categories = ['rent', 'food', 'transport', 'medical', 'school'];
+var sliders = {};
+var valueLabels = {};
+
+categories.forEach(function (cat) {
+  sliders[cat] = document.getElementById(cat);
+  valueLabels[cat] = document.getElementById(cat + 'Value');
+});
+
+// DOM Elements (Core)
+var balanceAmountEl = document.getElementById('balanceAmount');
+var balanceCard = document.getElementById('balanceCard');
+var feedbackEl = document.getElementById('feedback');
+var feedbackIcon = document.getElementById('feedbackIcon');
+var feedbackText = document.getElementById('feedbackText');
+var spentBarFill = document.getElementById('spentBarFill');
+var eventDeductionEl = document.getElementById('eventDeduction');
+var eventDeductionAmountEl = document.getElementById('eventDeductionAmount');
+
+// ─── NEW STATE: MULTI-MONTH, DEBT, DEPENDENTS & CRISIS ───
+var currentMonth = 1;
+var MAX_MONTHS = 3;
+var carriedDebt = 0;        // Carried over deficit + 5% interest
+var carriedSavings = 0;     // Carried over surplus
+var householdMode = 'self'; // 'self' or 'family'
+var isJobLossActive = false;
+var nextMonthJobLoss = false;
+var monthHistory = [];      // Array of monthly financial logs
+var hasShownNegativeModal = false;
+
+// DOM Elements (New Features)
+var currentMonthTag = document.getElementById('currentMonthTag');
+var monthCycleSubtext = document.getElementById('monthCycleSubtext');
+var carriedDebtPill = document.getElementById('carriedDebtPill');
+var carriedDebtAmountEl = document.getElementById('carriedDebtAmount');
+var carriedSavingsPill = document.getElementById('carriedSavingsPill');
+var carriedSavingsAmountEl = document.getElementById('carriedSavingsAmount');
+var debtInterestNotice = document.getElementById('debtInterestNotice');
+var noticeDebtAmount = document.getElementById('noticeDebtAmount');
+
+var bannerIncomeAmount = document.getElementById('bannerIncomeAmount');
+var incomeSubnote = document.getElementById('incomeSubnote');
+var incomeStatusBadge = document.getElementById('incomeStatusBadge');
+var jobStatusBadge = document.getElementById('jobStatusBadge');
+var spentLabel = document.getElementById('spentLabel');
+var totalBudgetCap = document.getElementById('totalBudgetCap');
+
+var dailyIncomeValue = document.getElementById('dailyIncomeValue');
+var gaugeFill = document.getElementById('gaugeFill');
+var gaugeVerdict = document.getElementById('gaugeVerdict');
+
+var householdBadge = document.getElementById('householdBadge');
+var depSelfBtn = document.getElementById('depSelfBtn');
+var depFamilyBtn = document.getElementById('depFamilyBtn');
+
+var negativeModalBackdrop = document.getElementById('negativeModalBackdrop');
+var summaryModalBackdrop = document.getElementById('summaryModalBackdrop');
+
+// Check sessionStorage for negative modal
+if (sessionStorage.getItem('poverty_budget_negative_modal_shown') === 'true') {
+  hasShownNegativeModal = true;
+}
+
+// ─── FORMATTING & UTILITIES ───
+function formatCurrency(n) {
+  var sign = n < 0 ? '-' : '';
+  var abs = Math.abs(n);
+  return sign + '\u20b9' + abs.toLocaleString('en-IN');
+}
+
+function updateSliderFill(slider) {
+  var pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+  slider.style.setProperty('--fill', pct + '%');
+}
+
+// ─── RECALCULATE LOGIC ───
+function recalculate() {
+  var totalSpent = 0;
+  categories.forEach(function (cat) {
+    var val = parseInt(sliders[cat].value, 10) || 0;
+    valueLabels[cat].textContent = formatCurrency(val);
+    totalSpent += val;
+    updateSliderFill(sliders[cat]);
+  });
+
+  // Effective available income this month
+  var effectiveIncome = currentMonthIncome + carriedSavings;
+
+  // Total expenditures = regular expenses + surprise life event + previous debt
+  var totalOutgoings = totalSpent + eventDeduction + carriedDebt;
+  var remaining = effectiveIncome - totalOutgoings;
+
+  balanceAmountEl.textContent = formatCurrency(remaining);
+
+  // Spent bar (relative to effective available funds)
+  var cap = effectiveIncome > 0 ? effectiveIncome : 1;
+  var spentPct = Math.min((totalOutgoings / cap) * 100, 100);
+  spentBarFill.style.width = spentPct + '%';
+
+  if (spentLabel) spentLabel.textContent = formatCurrency(totalOutgoings) + ' allocated';
+  if (totalBudgetCap) totalBudgetCap.textContent = formatCurrency(effectiveIncome) + ' available';
+
+  // Carried Debt & Savings display
+  if (carriedDebt > 0) {
+    if (carriedDebtPill) carriedDebtPill.style.display = 'inline-flex';
+    if (carriedDebtAmountEl) carriedDebtAmountEl.textContent = formatCurrency(carriedDebt);
+    if (debtInterestNotice) {
+      debtInterestNotice.style.display = 'block';
+      if (noticeDebtAmount) noticeDebtAmount.textContent = formatCurrency(carriedDebt);
+    }
+  } else {
+    if (carriedDebtPill) carriedDebtPill.style.display = 'none';
+    if (debtInterestNotice) debtInterestNotice.style.display = 'none';
+  }
+
+  if (carriedSavings > 0) {
+    if (carriedSavingsPill) carriedSavingsPill.style.display = 'inline-flex';
+    if (carriedSavingsAmountEl) carriedSavingsAmountEl.textContent = '+' + formatCurrency(carriedSavings);
+  } else {
+    if (carriedSavingsPill) carriedSavingsPill.style.display = 'none';
+  }
+
+  // Event deduction display
+  if (eventDeduction > 0) {
+    eventDeductionEl.style.opacity = '1';
+    eventDeductionAmountEl.textContent = formatCurrency(eventDeduction);
+  } else {
+    eventDeductionEl.style.opacity = '0';
+  }
+
+  // Determine state & visual classes
+  var state;
+  if (remaining < 0) {
+    state = 'red';
+  } else if (remaining < 500) {
+    state = 'orange';
+  } else {
+    state = 'green';
+  }
+
+  // Balance amount color
+  balanceAmountEl.className = 'balance-amount state-' + state;
+
+  // Spent bar color
+  spentBarFill.className = 'spent-bar-fill state-' + state;
+
+  // Feedback messaging
+  feedbackEl.className = 'feedback ' + state;
+  if (state === 'red') {
+    feedbackIcon.innerHTML = '\u26a0\ufe0f';
+    feedbackText.textContent = 'You\'re over budget by ' + formatCurrency(Math.abs(remaining)) + '. Cut expenses or this deficit will roll over as debt at +5% interest.';
+    
+    // Trigger shake animation on balance card
+    if (balanceCard && !balanceCard.classList.contains('shake')) {
+      balanceCard.classList.add('shake');
+      setTimeout(function () {
+        balanceCard.classList.remove('shake');
+      }, 500);
+    }
+
+    // Check one-time negative balance educational modal
+    checkAndTriggerNegativeModal();
+
+  } else if (state === 'orange') {
+    feedbackIcon.innerHTML = '\u26a1';
+    feedbackText.textContent = 'Only ' + formatCurrency(remaining) + ' cushion left \u2014 a single health shock could push you into predatory debt.';
+  } else {
+    feedbackIcon.innerHTML = '\u2705';
+    if (totalSpent === 0 && eventDeduction === 0 && carriedDebt === 0) {
+      feedbackText.textContent = 'You haven\'t allocated anything yet. Adjust sliders to plan your month!';
+    } else {
+      feedbackText.textContent = formatCurrency(remaining) + ' surplus \u2014 this leftover amount will carry over as emergency savings next month.';
+    }
+  }
+
+  // Update Daily Poverty Line Gauge
+  updateDailyPovertyGauge();
+}
+
+// ─── DAILY INCOME VS WORLD BANK POVERTY LINE GAUGE ───
+function updateDailyPovertyGauge() {
+  var daily = Math.round(currentMonthIncome / 30);
+  if (dailyIncomeValue) dailyIncomeValue.textContent = '\u20b9' + daily + ' / day';
+
+  var POVERTY_LINE = 180; // $2.15/day ~ ₹180
+  var MAX_SCALE = 350;
+  var pct = Math.min(100, Math.max(0, (daily / MAX_SCALE) * 100));
+
+  if (gaugeFill) {
+    gaugeFill.style.width = pct + '%';
+    if (daily < POVERTY_LINE) {
+      gaugeFill.className = 'gauge-fill below-line';
+    } else {
+      gaugeFill.className = 'gauge-fill';
+    }
+  }
+
+  if (gaugeVerdict) {
+    if (daily < POVERTY_LINE) {
+      gaugeVerdict.innerHTML = '&#9888; Simulated income is <strong>\u20b9' + daily + '/day</strong> &mdash; <span style="color:#ef4444;font-weight:700;">BELOW the World Bank Extreme Poverty Line of $2.15 (~&#8377;180/day)</span>. Severe deprivation!';
+    } else {
+      gaugeVerdict.innerHTML = 'Simulated income is <strong>\u20b9' + daily + '/day</strong> &mdash; currently above the <strong>&#8377;180/day ($2.15)</strong> extreme poverty line, but highly vulnerable.';
+    }
+  }
+}
+
+// ─── ONE-TIME FIRST NEGATIVE BALANCE MODAL ───
+function checkAndTriggerNegativeModal() {
+  if (!hasShownNegativeModal) {
+    hasShownNegativeModal = true;
+    try {
+      sessionStorage.setItem('poverty_budget_negative_modal_shown', 'true');
+    } catch (e) {}
+    if (negativeModalBackdrop) {
+      negativeModalBackdrop.classList.add('show');
+    }
+  }
+}
+
+function dismissNegativeModal() {
+  if (negativeModalBackdrop) {
+    negativeModalBackdrop.classList.remove('show');
+  }
+}
+
+// ─── DEPENDENTS HOUSEHOLD MODE TOGGLE ───
+function setHouseholdMode(mode) {
+  if (householdMode === mode) return;
+  householdMode = mode;
+
+  var foodSlider = sliders['food'];
+  var medSlider = sliders['medical'];
+  var schoolSlider = sliders['school'];
+
+  if (mode === 'family') {
+    depSelfBtn.classList.remove('active');
+    depFamilyBtn.classList.add('active');
+    householdBadge.textContent = 'Family of 4';
+
+    // Scale up Food, Medical, School max & values
+    foodSlider.max = 12000;
+    medSlider.max = 12000;
+    schoolSlider.max = 10000;
+
+    // Scale up current values by 1.6x if already set
+    categories.forEach(function (cat) {
+      if (cat === 'food' || cat === 'medical' || cat === 'school') {
+        var currentVal = parseInt(sliders[cat].value, 10);
+        if (currentVal > 0) {
+          var newVal = Math.min(parseInt(sliders[cat].max, 10), Math.round((currentVal * 1.6) / 100) * 100);
+          sliders[cat].value = newVal;
+        }
+      }
+    });
+
+  } else {
+    depFamilyBtn.classList.remove('active');
+    depSelfBtn.classList.add('active');
+    householdBadge.textContent = '1 Person';
+
+    // Reset max back to standard 8000
+    foodSlider.max = 8000;
+    medSlider.max = 8000;
+    schoolSlider.max = 8000;
+
+    categories.forEach(function (cat) {
+      if (cat === 'food' || cat === 'medical' || cat === 'school') {
+        var currentVal = parseInt(sliders[cat].value, 10);
+        if (currentVal > 0) {
+          var newVal = Math.min(8000, Math.round((currentVal / 1.6) / 100) * 100);
+          sliders[cat].value = newVal;
+        }
+      }
+    });
+  }
+
+  recalculate();
+}
+
+// ─── ATTACH SLIDER LISTENERS ───
+categories.forEach(function (cat) {
+  sliders[cat].addEventListener('input', recalculate);
+});
+
+// ─── RANDOM LIFE EVENTS (EXISTING FEATURE PRESERVED) ───
+var lifeEvents = [
+  { name: 'Child fell ill \u2014 doctor visit', min: 300, max: 1500 },
+  { name: 'School uniform & books needed', min: 400, max: 1200 },
+  { name: 'Roof leak \u2014 emergency repair', min: 500, max: 2000 },
+  { name: 'Festival expenses', min: 200, max: 800 },
+  { name: 'Phone broke \u2014 repair cost', min: 300, max: 1000 },
+  { name: 'Relative\'s wedding contribution', min: 500, max: 1500 },
+  { name: 'Cooking gas cylinder refill', min: 400, max: 900 },
+  { name: 'Lost wallet with cash', min: 200, max: 600 },
+  { name: 'Government ID renewal fees', min: 100, max: 500 },
+  { name: 'Water tanker \u2014 supply shortage', min: 200, max: 700 },
+  { name: 'Child needs spectacles', min: 300, max: 1000 },
+  { name: 'Unexpected travel \u2014 family emergency', min: 500, max: 2000 },
+];
+
+var toastTimeout = null;
+
+function showToast(title, amountStr, isWarning) {
+  var toast = document.getElementById('eventToast');
+  var toastName = document.getElementById('toastName');
+  var toastCost = document.getElementById('toastCost');
+
+  toastName.textContent = title;
+  toastCost.textContent = amountStr;
+  if (isWarning) {
+    toastCost.style.color = '#fca5a5';
+  } else {
+    toastCost.style.color = '#86efac';
+  }
+
+  toast.classList.add('show');
+
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(function () {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+function triggerLifeEvent() {
+  var event = lifeEvents[Math.floor(Math.random() * lifeEvents.length)];
+  var cost = Math.round(
+    (Math.random() * (event.max - event.min) + event.min) / 50
+  ) * 50;
+
+  eventDeduction += cost;
+  recalculate();
+
+  showToast(event.name, '\u2212' + formatCurrency(cost), true);
+
+  // Button micro-animation
+  var btn = document.getElementById('eventBtn');
+  btn.style.transform = 'scale(0.97)';
+  setTimeout(function () {
+    btn.style.transform = '';
+  }, 150);
+}
+
+// ─── RANDOM JOB-LOSS EVENT (NEW FEATURE) ───
+function triggerJobLossEvent() {
+  // Cuts income by 50% for next month and recalculates immediately
+  nextMonthJobLoss = true;
+  isJobLossActive = true;
+  currentMonthIncome = Math.round(BASE_INCOME * 0.5); // ₹4,000
+
+  // Update UI Elements
+  if (bannerIncomeAmount) bannerIncomeAmount.textContent = formatCurrency(currentMonthIncome);
+  if (incomeSubnote) incomeSubnote.textContent = 'Crisis Wage: \u20b94,000 (50% job cut applied)';
+  if (incomeStatusBadge) {
+    incomeStatusBadge.textContent = '\u26a0 Halved';
+    incomeStatusBadge.style.color = '#ef4444';
+    incomeStatusBadge.style.background = 'rgba(239, 68, 68, 0.1)';
+  }
+  if (jobStatusBadge) {
+    jobStatusBadge.style.display = 'inline-flex';
+    jobStatusBadge.textContent = '\u26a0 50% Wage Loss';
+  }
+
+  recalculate();
+
+  showToast('Job Loss Crisis!', '\u221250% Income (Now ' + formatCurrency(currentMonthIncome) + ')', true);
+
+  var btn = document.getElementById('jobLossBtn');
+  if (btn) {
+    btn.style.transform = 'scale(0.97)';
+    setTimeout(function () {
+      btn.style.transform = '';
+    }, 150);
+  }
+}
+
+// ─── NEXT MONTH BUTTON & DEBT WITH 5% INTEREST ───
+function advanceToNextMonth() {
+  // Calculate current month's financials
+  var totalSpent = 0;
+  var expenseBreakdown = {};
+  categories.forEach(function (cat) {
+    var val = parseInt(sliders[cat].value, 10) || 0;
+    expenseBreakdown[cat] = val;
+    totalSpent += val;
+  });
+
+  var effectiveIncome = currentMonthIncome + carriedSavings;
+  var totalOutgoings = totalSpent + eventDeduction + carriedDebt;
+  var remaining = effectiveIncome - totalOutgoings;
+
+  // Record this month in history
+  var monthRecord = {
+    month: currentMonth,
+    income: currentMonthIncome,
+    totalSpent: totalOutgoings,
+    remaining: remaining,
+    debtFree: remaining >= 0,
+    debtAccumulated: remaining < 0 ? Math.round(Math.abs(remaining) * 1.05) : 0,
+    savingsCarried: remaining >= 0 ? remaining : 0,
+    expenses: expenseBreakdown,
+    eventDeduction: eventDeduction
+  };
+  monthHistory.push(monthRecord);
+
+  // Carry over debt with 5% interest or carry over savings
+  if (remaining < 0) {
+    var newDebt = Math.round(Math.abs(remaining) * 1.05);
+    carriedDebt = newDebt;
+    carriedSavings = 0;
+    showToast('Month ' + currentMonth + ' Closed in Deficit', 'Carried Debt: ' + formatCurrency(carriedDebt) + ' (+5% int.)', true);
+  } else {
+    carriedSavings = remaining;
+    carriedDebt = 0;
+    showToast('Month ' + currentMonth + ' Survived Debt-Free!', 'Saved: ' + formatCurrency(carriedSavings) + ' carried over', false);
+  }
+
+  // Check if we reached end of 3-month simulation
+  if (currentMonth >= MAX_MONTHS) {
+    showSummaryResultsModal();
+    return;
+  }
+
+  // Advance Month counter
+  currentMonth++;
+  if (currentMonthTag) currentMonthTag.textContent = 'Month ' + currentMonth + ' of ' + MAX_MONTHS;
+  if (monthCycleSubtext) monthCycleSubtext.textContent = 'Active Budget Cycle ' + currentMonth;
+
+  // Reset Sliders
+  categories.forEach(function (cat) {
+    sliders[cat].value = 0;
+  });
+
+  // Reset surprise event deduction for new month
+  eventDeduction = 0;
+
+  // Apply or resolve job loss for next month
+  if (nextMonthJobLoss) {
+    currentMonthIncome = Math.round(BASE_INCOME * 0.5);
+    nextMonthJobLoss = false;
+  } else {
+    currentMonthIncome = BASE_INCOME;
+    isJobLossActive = false;
+    if (jobStatusBadge) jobStatusBadge.style.display = 'none';
+    if (incomeStatusBadge) {
+      incomeStatusBadge.textContent = '\u25cf Fixed';
+      incomeStatusBadge.style.color = '#10b981';
+      incomeStatusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+    }
+  }
+
+  if (bannerIncomeAmount) bannerIncomeAmount.textContent = formatCurrency(currentMonthIncome);
+  if (incomeSubnote) incomeSubnote.textContent = 'Base wage: ' + formatCurrency(currentMonthIncome) + '/month';
+
+  recalculate();
+
+  // Scroll to simulator section gently
+  var simSection = document.getElementById('simulatorSection');
+  if (simSection) {
+    simSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// ─── 3-MONTH RESULTS SUMMARY CARD ───
+function showSummaryResultsModal() {
+  if (!summaryModalBackdrop) return;
+
+  var debtFreeCount = 0;
+  var totalDebtAccumulated = 0;
+  var categoryTotals = {
+    rent: 0,
+    food: 0,
+    transport: 0,
+    medical: 0,
+    school: 0
+  };
+
+  monthHistory.forEach(function (m) {
+    if (m.debtFree) debtFreeCount++;
+    totalDebtAccumulated += m.debtAccumulated;
+    categories.forEach(function (cat) {
+      categoryTotals[cat] += (m.expenses[cat] || 0);
+    });
+  });
+
+  // Find biggest expense category
+  var biggestCategory = 'rent';
+  var biggestAmount = 0;
+  categories.forEach(function (cat) {
+    if (categoryTotals[cat] > biggestAmount) {
+      biggestAmount = categoryTotals[cat];
+      biggestCategory = cat;
+    }
+  });
+
+  var categoryLabels = {
+    rent: 'Rent \uD83C\uDFE0',
+    food: 'Food \uD83C\uDF5A',
+    transport: 'Transport \uD83D\uDE8C',
+    medical: 'Medical \uD83D\uDC8A',
+    school: 'School Fees \uD83D\uDCDA'
+  };
+
+  // Populate Summary Fields
+  var summaryDebtFreeMonths = document.getElementById('summaryDebtFreeMonths');
+  var summaryDebtFreeNote = document.getElementById('summaryDebtFreeNote');
+  var summaryTotalDebt = document.getElementById('summaryTotalDebt');
+  var summaryBiggestExpense = document.getElementById('summaryBiggestExpense');
+  var summaryBiggestExpenseNote = document.getElementById('summaryBiggestExpenseNote');
+  var breakdownTableBody = document.getElementById('breakdownTableBody');
+
+  if (summaryDebtFreeMonths) {
+    summaryDebtFreeMonths.textContent = debtFreeCount + ' / ' + MAX_MONTHS;
+    if (debtFreeCount === 3) {
+      summaryDebtFreeMonths.className = 'metric-value highlight-green';
+      summaryDebtFreeNote.textContent = 'Outstanding resilience! All 3 months balanced.';
+    } else if (debtFreeCount >= 1) {
+      summaryDebtFreeMonths.className = 'metric-value highlight-blue';
+      summaryDebtFreeNote.textContent = 'Survived with partial debt pressure.';
+    } else {
+      summaryDebtFreeMonths.className = 'metric-value highlight-red';
+      summaryDebtFreeNote.textContent = 'Trapped in chronic deficit across all months.';
+    }
+  }
+
+  if (summaryTotalDebt) {
+    summaryTotalDebt.textContent = formatCurrency(totalDebtAccumulated);
+  }
+
+  if (summaryBiggestExpense) {
+    summaryBiggestExpense.textContent = (categoryLabels[biggestCategory] || biggestCategory) + ' (' + formatCurrency(biggestAmount) + ')';
+    if (summaryBiggestExpenseNote) {
+      summaryBiggestExpenseNote.textContent = 'Accounted for the largest financial burden across 3 months';
+    }
+  }
+
+  // Populate Breakdown Table
+  if (breakdownTableBody) {
+    breakdownTableBody.innerHTML = '';
+    monthHistory.forEach(function (m) {
+      var row = document.createElement('tr');
+      var outcomeText = m.debtFree ? ('+' + formatCurrency(m.remaining) + ' surplus') : ('-' + formatCurrency(Math.abs(m.remaining)) + ' deficit');
+      var outcomeColor = m.debtFree ? '#10b981' : '#ef4444';
+      row.innerHTML = '<td>Month ' + m.month + '</td>' +
+                      '<td>' + formatCurrency(m.income) + '</td>' +
+                      '<td>' + formatCurrency(m.totalSpent) + '</td>' +
+                      '<td style="color:' + outcomeColor + ';font-weight:700;">' + outcomeText + '</td>';
+      breakdownTableBody.appendChild(row);
+    });
+  }
+
+  summaryModalBackdrop.classList.add('show');
+}
+
+function closeSummaryModal() {
+  if (summaryModalBackdrop) {
+    summaryModalBackdrop.classList.remove('show');
+  }
+}
+
+// ─── RESTART SIMULATION ───
+function restartSimulation() {
+  currentMonth = 1;
+  carriedDebt = 0;
+  carriedSavings = 0;
+  monthHistory = [];
+  eventDeduction = 0;
+  isJobLossActive = false;
+  nextMonthJobLoss = false;
+  currentMonthIncome = BASE_INCOME;
+
+  if (currentMonthTag) currentMonthTag.textContent = 'Month 1 of ' + MAX_MONTHS;
+  if (monthCycleSubtext) monthCycleSubtext.textContent = 'Standard Budget Cycle';
+  if (bannerIncomeAmount) bannerIncomeAmount.textContent = formatCurrency(BASE_INCOME);
+  if (incomeSubnote) incomeSubnote.textContent = 'Base wage: ' + formatCurrency(BASE_INCOME) + '/month';
+  if (jobStatusBadge) jobStatusBadge.style.display = 'none';
+  if (incomeStatusBadge) {
+    incomeStatusBadge.textContent = '\u25cf Fixed';
+    incomeStatusBadge.style.color = '#10b981';
+    incomeStatusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+  }
+
+  categories.forEach(function (cat) {
+    sliders[cat].value = 0;
+  });
+
+  setHouseholdMode('self');
+  closeSummaryModal();
+  recalculate();
+
+  var simSection = document.getElementById('simulatorSection');
+  if (simSection) {
+    simSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  showToast('Simulation Reset', 'Month 1 started fresh', false);
+}
+
+// ─── INITIAL RENDER ───
+recalculate();
+
+</script>
 </body>
 </html>
